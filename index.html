@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>오늘 뭐먹지~??</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      text-align: center;
+      margin: 30px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover:enabled {
+      background-color: #0056b3;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    .box {
+      margin-top: 20px;
+      padding: 20px;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      background-color: #ffffff;
+      width: 320px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: #444;
+    }
+
+    #selectedTheme {
+      font-size: 1.1em;
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      padding: 6px 0;
+      font-size: 1rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>오늘 뭐먹지~??</h1>
+  <button onclick="recommendTheme()">요리 테마 결정!!</button>
+  <button onclick="recommendDishes()" disabled id="dishBtn">메뉴 결정!!</button>
+
+  <div class="box" id="themeBox">
+    <h2>요리 테마</h2>
+    <div id="selectedTheme">없음</div>
+  </div>
+
+  <div class="box" id="dishBox">
+    <h2>추천 요리</h2>
+    <ul id="dishList"></ul>
+  </div>
+
+  <script>
+    const themeMap = {
+      "한식": ["감자탕", "순대국밥", "보쌈족발", "샤브샤브", "순두부찌개", "쭈꾸미볶음", "분식집"],
+      "구이": ["돼지고기", "소고기", "닭갈비", "곱창", "오리구이"],
+      "유러피안": ["파스타", "스테이크", "이탈리안 피자", "스페니쉬 레스토랑", "프렌치 레스토랑"],
+      "아시안": ["차이니스 레스토랑", "베트남 레스토랑", "타이 레스토랑", "인디안 레스토랑", "딤섬"],
+      "일식": ["스시", "라멘", "돈카츠", "이자카야", "규카츠", "야키니쿠"],
+      "아메리칸": ["멕시칸 음식", "시카고 피자", "수제 버거", "치킨"]
+    };
+
+    let selectedTheme = null;
+
+    function recommendTheme() {
+      const themes = Object.keys(themeMap);
+      const themeBox = document.getElementById("selectedTheme");
+      document.getElementById("dishList").innerHTML = "";
+      document.getElementById("dishBtn").disabled = true;
+
+      let count = 0;
+      const interval = setInterval(() => {
+        themeBox.innerText = themes[Math.floor(Math.random() * themes.length)];
+        count++;
+        if (count > 10) {
+          clearInterval(interval);
+          selectedTheme = themes[Math.floor(Math.random() * themes.length)];
+          themeBox.innerText = selectedTheme;
+          document.getElementById("dishBtn").disabled = false;
+        }
+      }, 80);
+    }
+
+    function recommendDishes() {
+      if (!selectedTheme) return;
+      const dishes = [...themeMap[selectedTheme]];
+      const dishList = document.getElementById("dishList");
+      dishList.innerHTML = "";
+
+      let count = 0;
+      const interval = setInterval(() => {
+        const randomDish = dishes[Math.floor(Math.random() * dishes.length)];
+        dishList.innerHTML = `<li>${randomDish}</li>`;
+        count++;
+        if (count > 10) {
+          clearInterval(interval);
+          const selectedDish = dishes[Math.floor(Math.random() * dishes.length)];
+          dishList.innerHTML = `<li>${selectedDish}</li>`;
+        }
+      }, 80);
+    }
+  </script>
+</body>
+</html>
